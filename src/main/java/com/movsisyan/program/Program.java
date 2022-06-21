@@ -11,10 +11,7 @@ import com.movsisyan.model.Triangle;
 import com.movsisyan.repository.Repository;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Program {
     public static void main(String[] args) {
@@ -49,12 +46,17 @@ public class Program {
                 Triangle triangle = new Triangle(v, v1, v2);
                 figures.add(triangle);
             } else if (number == 3) {
-                double v = scanner.nextDouble();
-                Calculator calculator = new Calculator(new Figure() {
-                    double R;
+                Figure figure = new Figure() {
+                    private double R;
 
-                    public void setR(double r) {
-                        R = r;
+                    {
+                        double v = scanner.nextDouble();
+                        if(v > 0)
+                            this.setR(v);
+                    }
+
+                    public void setR(double v) {
+                        this.R = v;
                     }
 
                     @Override
@@ -74,10 +76,16 @@ public class Program {
 
                     @Override
                     public String toCSV() {
-                        return null;
+                        StringJoiner sj = new StringJoiner(";");
+                        sj.add(this.getName());
+                        sj.add(String.valueOf(this.R));
+                        sj.add(String.valueOf(this.square()));
+                        sj.add(String.valueOf(this.perimeter()));
+                        return sj.toString();
                     }
-                });
-                System.out.println(calculator.calculate(Functor.PERIMETER));
+                };
+                Calculator calculator = new Calculator(figure);
+                System.out.println(calculator.calculate(Functor.SQUARE));
             }
         }
 //        System.out.println(Repository.maxFigures(figures, Functor.PERIMETER));
